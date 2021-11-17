@@ -19,9 +19,12 @@ def build_tram_stops(jsonobject = '../data/tramstops.json'):
 def build_tram_lines(lines = '../data/tramlines.txt'):
     try:
       with open(lines, 'r', encoding='utf8',) as f:
+          ls = f.read().split("\n\n")
+          del ls[-1] # to deal with trailing \n\n
           
-
-            
+          for l in ls:
+            print(l)
+            # gets each tram line as a separate string object in the list ls.
           
 
     except FileNotFoundError:
