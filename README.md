@@ -1,2 +1,3 @@
-# chalmers-advanced-python
-Public repository for Chalmers Advanced Python course material.
+# DAT515 Chalmers Advanced Python
+Repository for Chalmers Advanced Python course material and labs. 
+
