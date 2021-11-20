@@ -29,8 +29,9 @@ def parse_file(f):
     tram_lines.update( { l[0] : l[1:] })
 
     stops = list(map(re.sub, len(line)*["\s{2,}"], len(line)*[","], line))
-    for s in stops:
-      print(s)
+    for s in stops[1:]:
+      (s,t) = s.split(",")
+      print(s,t)
 
   return tram_lines, travel_times
 
