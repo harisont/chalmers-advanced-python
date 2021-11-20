@@ -13,6 +13,7 @@ def build_tram_stops(jsonobject = '../data/tramstops.json'):
       with open(jsonobject, 'r') as f:
         raw_data = json.load(f)
         locs = {k: {'lat': v["position"][0], 'long': v["position"][1]} for (k, v) in raw_data.items()}
+      return locs
     except FileNotFoundError:
       print(f"Data base file not found on relative path: {jsonobject}")
 
@@ -30,7 +31,8 @@ def parse_file(f):
 def build_tram_lines(lines = '../data/tramlines.txt'):
     try:
       with open(lines, 'r', encoding='utf8',) as f:
-          out = parse_file(f)
+        out = parse_file(f)
+      return out
     except FileNotFoundError:
       print(f"Tramline file not found on relative path: {lines}")
 
