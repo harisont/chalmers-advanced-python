@@ -28,7 +28,7 @@ def parse_file(f):
     l = list(map(re.sub, len(line)*[":|\s+\d+:\d+"], len(line)*[""], line))
     tram_lines.update( { l[0] : l[1:] })
 
-    stops = list(map(re.sub, len(line)*["\s{2,}\d+:\d+"], len(line)*[""], line))
+    stops = list(map(re.sub, len(line)*["\s{2,}"], len(line)*[","], line))
     for s in stops:
       print(s)
 
