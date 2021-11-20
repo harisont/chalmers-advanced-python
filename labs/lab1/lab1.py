@@ -16,17 +16,21 @@ def build_tram_stops(jsonobject = '../data/tramstops.json'):
     except FileNotFoundError:
       print(f"Data base file not found on relative path: {jsonobject}")
 
+
+""" Parses a text file and returns a dictionary """
+def parse_file(f):
+  lines = f.read().split("\n\n")[:-1] # ignore last empty element
+  out = {}
+  for line in lines: 
+    line = line.split("\n")
+    l = list(map(re.sub, len(line)*[":|\s+\d+:\d+"], len(line)*[""], line))
+    out.update( { l[0] : set( l[1:] )})
+  return out
+  
 def build_tram_lines(lines = '../data/tramlines.txt'):
     try:
       with open(lines, 'r', encoding='utf8',) as f:
-          ls = f.read().split("\n\n")
-          del ls[-1] # to deal with trailing \n\n
-          
-          for l in ls:
-            print(l)
-            # gets each tram line as a separate string object in the list ls.
-          
-
+          out = parse_file(f)
     except FileNotFoundError:
       print(f"Tramline file not found on relative path: {lines}")
 
