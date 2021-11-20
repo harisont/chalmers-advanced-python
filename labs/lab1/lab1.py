@@ -30,6 +30,8 @@ def parse_file(f):
   lines = dict(zip(keys, stops))
   print(lines)
   
+  return lines
+  
 
 
 def build_tram_lines(lines = '../data/tramlines.txt'):
