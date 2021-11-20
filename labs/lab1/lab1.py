@@ -20,27 +20,22 @@ def build_tram_stops(jsonobject = '../data/tramstops.json'):
 
 """ Parses a text file and returns a dictionary """
 def parse_file(f):
-  lines = f.read().split("\n\n")[:-1] # ignore last empty element
+  txt = f.read()
+  keys = [re.sub(":\n$", "", l) for l in re.findall(".+:\n", txt)]
+  stops = [re.findall(".+\S+(?=\s{2,}\d+:\d+)", s) for s in re.split(".+\n\n", txt)]
+  times = [re.findall("\d+:\d+", l) for l in re.split(".+\n\n", txt)]  
+  # print(keys)
+  # print(stops)
+  # print(times)
+  lines = dict(zip(keys, stops))
+  print(lines)
   
-  travel_times, tram_lines = {}, {}
-  for line in lines: 
-    line = line.split("\n")
-    l = list(map(re.sub, len(line)*[":|\s+\d+:\d+"], len(line)*[""], line))
-    tram_lines.update( { l[0] : l[1:] })
-
-    stops = list(map(re.sub, len(line)*["\s{2,}"], len(line)*[","], line))
-    for s in stops[1:]:
-      (s,t) = s.split(",")
-      print(s,t)
-
-  return tram_lines, travel_times
 
 
 def build_tram_lines(lines = '../data/tramlines.txt'):
     try:
       with open(lines, 'r', encoding='utf8',) as f:
-        tram_lines, tram_times = parse_file(f)
-        return tram_lines, tram_times
+        parse_file(f)
     except FileNotFoundError:
       print(f"Tramline file not found on relative path: {lines}")
 
