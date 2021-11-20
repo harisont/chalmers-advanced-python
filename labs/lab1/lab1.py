@@ -5,7 +5,7 @@ The task is to write:
 3. A dialogue function that answers to queries. 
    The dialogue function should be divided into two parts to enable more accurate testing.'''
 
-import json, csv, re
+import json, re
 
 
 def build_tram_stops(jsonobject = '../data/tramstops.json'):
