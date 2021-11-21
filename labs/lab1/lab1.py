@@ -21,7 +21,10 @@ def build_tram_lines(file):
   for (sl1, sl2) in zip(stop_lists, time_lists):
     for (s1, t1, i) in zip(sl1, sl2, range(len(sl1))): 
       for (s2, t2) in zip(sl1[i:], sl2[i:]):
-        """ This part is ugly and could surely be written better."""
+        """ 
+        This part is ugly and could surely be written better.
+        It does however ensure that the times are updated symmetrically. 
+        """
         t = t2 - t1
         if s1 not in times.keys():
           times[s1] = {s2: t}
