@@ -58,7 +58,7 @@ def build_tram_network(somefiles = ['../data/tramstops.json' ,'../data/tramlines
     print(f"Tramline file not found on relative path: {somefiles[1]}")
 
   try:
-      with open("../data/tramnetwork.json", 'w') as f:
+      with open("./tramnetwork.json", 'w') as f:
         out = {"stops": stops, "lines": lines, "times": times}
         f.write(json.dumps(out))
   except FileNotFoundError:
