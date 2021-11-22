@@ -1,4 +1,4 @@
-import json, re
+import json, re, math
 
 def build_tram_stops(jsonobject):
   raw_data = json.load(jsonobject)
@@ -72,14 +72,14 @@ def lines_via_stop(lines, stop):
   
 
 """ Function will return an alphabetically sorted list of trams that go from stop A to B. """
-def lines_between_stops(lines, stop1, stop2):
+def lines_between_stops(lines, stop1, stop2) -> list:
   return [line for line in lines_via_stop(lines, stop1) if line in lines_via_stop(lines, stop2)].sort()
 
 
 """ Function returns the time from `stop1` to `stop2` along the given `line`. 
 This is obtained as the sum of all distances between adjacent stops. 
 If the stops are not along the same line, an error message is printed. """
-def time_between_stops(lines: dict, times: dict, line: str, stop1: str, stop2: str):
+def time_between_stops(lines: dict, times: dict, line: str, stop1: str, stop2: str) -> int:
   stops: list = lines[line]
   if stop1 not in stops:
     print(f"{stop1} not a stop along line: {line}")
@@ -102,8 +102,25 @@ def time_between_stops(lines: dict, times: dict, line: str, stop1: str, stop2: s
 Will give distance from stop A and B using formula at: 
 https://en.wikipedia.org/wiki/Geographical_distance#Spherical_Earth_projected_to_a_plane
 """
-def distance_between_stops(somedicts, stop1, stop2):
-  raise NotImplementedError
+def distance_between_stops(stops: dict, stop1, stop2) -> float: # tested against example online
+  R =  6371.009  # km 
+  x2rad = math.pi/180
+  (lat1, lon1) = zip(**stops[stop1])
+  (lat2, lon2) = zip(**stops[stop2])
+  
+  mlat = 0.5 * (lat1+lat2) * x2rad # mean latitude in rads
+  dlat = (lat2-lat1) * x2rad # delta latitude in rads
+  dlong = (lon2 - lon1) * x2rad # delta longitude in rads 
+  
+  try: 
+    dist = R*math.sqrt(dlat**2 + (math.cos(mlat) * dlong)**2)
+  except ValueError: 
+    print(f"Could not calculate distance between stops {stop1, stop2}", end=" ")
+    print("with coordinates {lat1, lon1, lat2, lon2}")
+
+  return dist
+
+
 
 
 if __name__ == "__main__":
