@@ -6,7 +6,6 @@ def build_tram_stops(jsonobject):
   return geo_locs
 
 
-
 def build_tram_lines(file):
   txt = file.read()
   
@@ -41,7 +40,6 @@ def build_tram_lines(file):
   return lines, times
 
 
-
 def build_tram_network(somefiles = ['../data/tramstops.json' ,'../data/tramlines.txt']):
   out = {}
   try:
@@ -61,7 +59,7 @@ def build_tram_network(somefiles = ['../data/tramstops.json' ,'../data/tramlines
         out = {"stops": stops, "lines": lines, "times": times}
         f.write(json.dumps(out))
   except FileNotFoundError:
-    print(f"File path not")
+    print(f"File path not found")
   except FileExistsError: 
     print("File exists")
 
@@ -95,8 +93,6 @@ def time_between_stops(lines: dict, times: dict, line: str, stop1: str, stop2: s
   
   return x
 
-  
-  
 
 """
 Will give distance from stop A and B using formula at: 
@@ -105,8 +101,14 @@ https://en.wikipedia.org/wiki/Geographical_distance#Spherical_Earth_projected_to
 def distance_between_stops(stops: dict, stop1, stop2) -> float: # tested against example online
   R =  6371.009  # km 
   x2rad = math.pi/180
-  (lat1, lon1) = zip(**stops[stop1])
-  (lat2, lon2) = zip(**stops[stop2])
+  dist = 0
+  
+  try: 
+    (lat1, lon1) = zip(**stops[stop1])
+    (lat2, lon2) = zip(**stops[stop2])
+  except KeyError: 
+    print("Latitude and longitude of one stop not in database. ")
+    return dist
   
   mlat = 0.5 * (lat1+lat2) * x2rad # mean latitude in rads
   dlat = (lat2-lat1) * x2rad # delta latitude in rads
@@ -116,11 +118,9 @@ def distance_between_stops(stops: dict, stop1, stop2) -> float: # tested against
     dist = R*math.sqrt(dlat**2 + (math.cos(mlat) * dlong)**2)
   except ValueError: 
     print(f"Could not calculate distance between stops {stop1, stop2}", end=" ")
-    print("with coordinates {lat1, lon1, lat2, lon2}")
+    print(f"with coordinates {lat1, lon1, lat2, lon2}")
 
   return dist
-
-
 
 
 if __name__ == "__main__":
