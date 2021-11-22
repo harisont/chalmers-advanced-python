@@ -1,7 +1,7 @@
-import json, re, math
+import json, re, math, sys
 
 def build_tram_stops(jsonobject):
-  raw_data = json.load(jsonobject)
+  raw_data:dict = json.load(jsonobject)
   geo_locs = {k: {'lat': v["position"][0], 'long': v["position"][1]} for (k, v) in raw_data.items()}
   return geo_locs
 
@@ -123,5 +123,28 @@ def distance_between_stops(stops: dict, stop1, stop2) -> float: # tested against
   return dist
 
 
+def dialogue(jsonfile = "./tramnetwork.json") -> None:
+  try:
+    with open(jsonfile, 'r') as f:
+      db = json.load(f)
+  except FileNotFoundError:
+    print("Restart program with argument --init to build database.")
+  
+  q = ""
+  while (q != "quit"): 
+    print("Please enter your query:")
+    q = input()
+    print(q)
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
-  build_tram_network()
+  if sys.argv[1:] == ['init']:
+    build_tram_network()
+  else:
+    dialogue()			
