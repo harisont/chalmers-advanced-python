@@ -79,8 +79,24 @@ def lines_between_stops(lines, stop1, stop2):
 """ Function returns the time from `stop1` to `stop2` along the given `line`. 
 This is obtained as the sum of all distances between adjacent stops. 
 If the stops are not along the same line, an error message is printed. """
-def time_between_stops(somedicts, line, stop1, stop2):
-  raise NotImplementedError
+def time_between_stops(lines: dict, times: dict, line: str, stop1: str, stop2: str):
+  stops: list = lines[line]
+  if stop1 not in stops:
+    print(f"{stop1} not a stop along line: {line}")
+  if stop2 not in stops:
+    print(f"{stop2} not a stop along line: {line}")
+  
+  x = 0
+  r1 = range(stops.index(stop1), stops.index(stop2))
+  r2 = r1 + 1
+  for (s1, s2) in zip(stops[r1], stops[r2]):
+    x+= times[s1][s2]
+    # Make an try/catch if this fails due to database errors? 
+  
+  return x
+
+  
+  
 
 """
 Will give distance from stop A and B using formula at: 
