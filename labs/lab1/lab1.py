@@ -1,6 +1,5 @@
 import json, re
 
-
 def build_tram_stops(jsonobject):
   raw_data = json.load(jsonobject)
   geo_locs = {k: {'lat': v["position"][0], 'long': v["position"][1]} for (k, v) in raw_data.items()}
@@ -65,6 +64,30 @@ def build_tram_network(somefiles = ['../data/tramstops.json' ,'../data/tramlines
     print(f"File path not")
   except FileExistsError: 
     print("File exists")
+
+
+""" Function will return a alphabetically sorted list of trams that pass a stop. """
+def lines_via_stop(lines, stop):
+  raise NotImplementedError
+
+
+""" Function will return a alphabetically sorted list of trams that go from stop A to B. """
+def lines_between_stops(somedicts, stop1, stop2):
+  raise NotImplementedError
+
+
+""" Function returns the time from `stop1` to `stop2` along the given `line`. 
+This is obtained as the sum of all distances between adjacent stops. 
+If the stops are not along the same line, an error message is printed. """
+def time_between_stops(somedicts, line, stop1, stop2):
+  raise NotImplementedError
+
+"""
+Will give distance from stop A and B using formula at: 
+https://en.wikipedia.org/wiki/Geographical_distance#Spherical_Earth_projected_to_a_plane
+"""
+def distance_between_stops(somedicts, stop1, stop2):
+  raise NotImplementedError
 
 
 if __name__ == "__main__":
