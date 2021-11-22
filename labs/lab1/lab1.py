@@ -130,13 +130,25 @@ def dialogue(jsonfile = "./tramnetwork.json") -> None:
   except FileNotFoundError:
     print("Restart program with argument --init to build database.")
   
-  q = ""
-  while (q != "quit"): 
+  is_arg = lambda q,s: q.find(s) != -1 # make this function parse using regex? 
+  
+  while True: 
     print("Please enter your query:")
     q = input()
-    print(q)
-
-
+    if is_arg(q, "quit"):
+      print(f"Quiting with input: {q}")
+      break
+    elif is_arg(q, "via"):
+      pass
+    elif is_arg(q, "between"):
+      pass
+    elif is_arg(q, "time with"):
+      pass
+    elif is_arg(q, "distance from"):
+      pass
+    else:
+      print("enter one of the queries: via, between, time with, distance from, quit")
+  
 
 
 
