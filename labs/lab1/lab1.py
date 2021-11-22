@@ -71,10 +71,9 @@ def lines_via_stop(lines, stop):
   return [l if stop in lines[l] else None for l in lines.keys()].sort()
   
 
-
 """ Function will return an alphabetically sorted list of trams that go from stop A to B. """
-def lines_between_stops(somedicts, stop1, stop2):
-  raise NotImplementedError
+def lines_between_stops(lines, stop1, stop2):
+  return [line for line in lines_via_stop(lines, stop1) if line in lines_via_stop(lines, stop2)].sort()
 
 
 """ Function returns the time from `stop1` to `stop2` along the given `line`. 
