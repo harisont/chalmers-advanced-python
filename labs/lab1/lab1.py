@@ -64,14 +64,15 @@ def build_tram_network(somefiles = ['../data/tramstops.json' ,'../data/tramlines
     print("File exists")
 
 
-""" Function will return an alphabetically sorted list of trams that pass a stop. """
+""" Function will return an numerically sorted list of trams that pass a stop. """
 def lines_via_stop(lines, stop):
-  return [l if stop in lines[l] else None for l in lines.keys()].sort()
+  return sorted([l for l in lines.keys() if stop in lines[l]], key= lambda x: int(x))
   
 
-""" Function will return an alphabetically sorted list of trams that go from stop A to B. """
+""" Function will return an numerically sorted list of trams that go from stop A to B. """
 def lines_between_stops(lines, stop1, stop2) -> list:
-  return [line for line in lines_via_stop(lines, stop1) if line in lines_via_stop(lines, stop2)].sort()
+  ans = [l for l in lines_via_stop(lines, stop1) if l in lines_via_stop(lines, stop2)]
+  return sorted(ans, key = lambda x: int(x))
 
 
 """ Function returns the time from `stop1` to `stop2` along the given `line`. 
@@ -130,26 +131,32 @@ def dialogue(jsonfile = "./tramnetwork.json") -> None:
   except FileNotFoundError:
     print("Restart program with argument --init to build database.")
   
-  is_arg = lambda q,s: q.find(s) != -1 # make this function parse using regex? 
+  get_arg = lambda q, p: re.match(p, q) != None
   
-  while True: 
-    print("Please enter your query:")
-    q = input()
-    if is_arg(q, "quit"):
-      print(f"Quiting with input: {q}")
-      break
-    elif is_arg(q, "via"):
-      pass
-    elif is_arg(q, "between"):
-      pass
-    elif is_arg(q, "time with"):
-      pass
-    elif is_arg(q, "distance from"):
-      pass
-    else:
-      print("enter one of the queries: via, between, time with, distance from, quit")
-  
+  """
+  Read input, split it into a list of words 
+  Read from start of string and match against fixed prompts to decide action
+  Extract line and stop from argument, check if they exist
+  If yes: return answer
+  Else: print "unkown arguments"
+  """
 
+
+  while True: 
+    print("> ", end = "")
+    s = re.split("\s+", input())
+    q = " ".join(s)
+    if(get_arg(q, "^\s*quit\s*$")):
+      break
+    elif(get_arg(q, "^\s*via")):
+      pass
+
+
+    else:
+      print("sorry, try again")
+    a = "^\s*between"
+    b = "^\s*time\s+with"
+    c = "^\s*distance\s+from"
 
 
 
