@@ -141,7 +141,6 @@ def dialogue(jsonfile = "./tramnetwork.json") -> None:
   Else: print "unkown arguments"
   """
 
-
   while True: 
     print("> ", end = "")
     s = re.split("\s+", input())
@@ -149,14 +148,15 @@ def dialogue(jsonfile = "./tramnetwork.json") -> None:
     if(get_arg(q, "^\s*quit\s*$")):
       break
     elif(get_arg(q, "^\s*via")):
-      pass
-
-
+      print("via")
+    elif(get_arg(q,"^\s*between")):
+      print("between")
+    elif(get_arg(q,"^\s*time\s+with")):
+      print("time with")
+    elif(get_arg(q, "^\s*distance\s+from")):
+      print("distance from")
     else:
       print("sorry, try again")
-    a = "^\s*between"
-    b = "^\s*time\s+with"
-    c = "^\s*distance\s+from"
 
 
 
