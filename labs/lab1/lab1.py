@@ -151,17 +151,28 @@ def answer_query(tramdict, q: str):
   
   match arg:
     case "via":
-      if re.search("(?<=via).+", q) != None:
-        stop = re.search("(?<=via).+", q).group(0).strip().title()
+      stop = re.search("(?<=via).*", q)
+      if stop != None:
+        stop = re.search("(?<=via).*", q).group(0).strip().title()
+        print(stop)
         lines = lines_via_stop(tramdict["lines"], stop)
         if lines:
           print(lines)
         else:
           print(f"Unknown stop: {stop}.")
-
-        
       
     case "between":
+      if re.search("(?<=between).+\sand\s.+", q) != None:
+        stop1 = re.search("(?<=between).+(?=\sand)", q).group(0).strip().title()
+        stop2 = re.search("(?<=and\s).+", q).group(0).strip().title()
+        
+        
+        
+        if lines:
+          print(lines)
+        else:
+          print(f"Unknown stop: {stop}.")
+      
 
       print("between")
     case "time with":
