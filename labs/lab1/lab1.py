@@ -66,7 +66,7 @@ def build_tram_network(somefiles = ['../data/tramstops.json' ,'../data/tramlines
 
 """ Function will return an numerically sorted list of trams that pass a stop. """
 def lines_via_stop(lines, stop):
-  return sorted([l for l in lines.keys() if stop in lines[l]], key= lambda x: int(x))
+  return sorted([l for l in lines.keys() if stop in lines[l]], key = lambda x: int(x))
   
 
 """ Function will return an numerically sorted list of trams that go from stop A to B. """
@@ -133,33 +133,35 @@ def dialogue(jsonfile = "./tramnetwork.json") -> None:
   
   get_arg = lambda q, p: re.match(p, q) != None
   
-  """
-  Read input, split it into a list of words 
-  Read from start of string and match against fixed prompts to decide action
-  Extract line and stop from argument, check if they exist
-  If yes: return answer
-  Else: print "unkown arguments"
-  """
-
   while True: 
     print("> ", end = "")
-    s = re.split("\s+", input())
-    q = " ".join(s)
+    q = input()
     if(get_arg(q, "^\s*quit\s*$")):
       break
+
     elif(get_arg(q, "^\s*via")):
-      print("via")
+      print(answer_query(db["lines"], q))
+
     elif(get_arg(q,"^\s*between")):
-      print("between")
+      print(answer_query(db["lines"], q))
+
     elif(get_arg(q,"^\s*time\s+with")):
-      print("time with")
+      print(answer_query(db["lines"], q))
+
     elif(get_arg(q, "^\s*distance\s+from")):
-      print("distance from")
+      print(answer_query(db["lines"], q))
+
+
     else:
       print("sorry, try again")
 
 
-
+def answer_query(tramdict, query):
+  s = re.search("(?<=via\s).*", query).group(0)
+  if s not in tramdict.items(): 
+    print("unknown argument")
+  else:
+    print(lines_via_stop(db["lines"], s))
 
 
 if __name__ == "__main__":
