@@ -130,38 +130,48 @@ def dialogue(jsonfile = "./tramnetwork.json") -> None:
       db = json.load(f)
   except FileNotFoundError:
     print("Restart program with argument --init to build database.")
-  
-  get_arg = lambda q, p: re.match(p, q) != None
-  
+
   while True: 
     print("> ", end = "")
     q = input()
-    if(get_arg(q, "^\s*quit\s*$")):
+    if(re.match("^\s*quit\s*$", q) != None):
       break
-
-    elif(get_arg(q, "^\s*via")):
-      print(answer_query(db["lines"], q))
-
-    elif(get_arg(q,"^\s*between")):
-      print(answer_query(db["lines"], q))
-
-    elif(get_arg(q,"^\s*time\s+with")):
-      print(answer_query(db["lines"], q))
-
-    elif(get_arg(q, "^\s*distance\s+from")):
-      print(answer_query(db["lines"], q))
+    else: 
+      print( answer_query(db, q) )
 
 
-    else:
+def answer_query(tramdict, q: str):
+  q = q.lower()
+  args = "^\s*(via|between|time\swith|distance\sfrom)\s*"
+  
+  arg = ""
+  if re.search(args, q) != None: 
+    arg = re.search(args, q).group(0).strip()
+    print(arg)
+  
+  match arg:
+    case "via":
+      if re.search("(?<=via).+", q) != None:
+        stop = re.search("(?<=via).+", q).group(0).strip().title()
+        lines = lines_via_stop(tramdict["lines"], stop)
+        if lines:
+          print(lines)
+        else:
+          print(f"Unknown stop: {stop}.")
+
+        
+      
+    case "between":
+
+      print("between")
+    case "time with":
+
+      print("time with")
+    case "distance from":
+
+      print("distance from")
+    case _: 
       print("sorry, try again")
-
-
-def answer_query(tramdict, query):
-  s = re.search("(?<=via\s).*", query).group(0)
-  if s not in tramdict.items(): 
-    print("unknown argument")
-  else:
-    print(lines_via_stop(db["lines"], s))
 
 
 if __name__ == "__main__":
