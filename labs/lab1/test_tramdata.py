@@ -1,22 +1,19 @@
 import unittest
-from tramdata import *
+# from tramdata import *
+import json
+from lab1 import *
+# from hypothesis.strategies import text
 from math import acos, cos, sin, radians
 TRAM_FILE = './tramnetwork.json'
-
-
-def distance(lat1, lon1, lat2, lon2):
-    theta = lon1 - lon2
-    dist = acos(sin(radians(lat1)) * sin(radians(lat2)) + cos(radians(lat1)) * cos(radians(lat2)) * cos(radians(theta)))
-    return dist * 111.9
-
 
 class TestTramData(unittest.TestCase):
 
     def setUp(self):
         with open(TRAM_FILE) as trams:
             tramdict = json.loads(trams.read())
-            self.stopdict = tramdict['stops']
-            self.linedict = tramdict['lines']
+            self.stopdict: dict = tramdict['stops']
+            self.linedict: dict = tramdict['lines']
+            self.timedict: dict = tramdict['times']
 
     def test_stops_exist(self):
         stopset = {stop for line in self.linedict for stop in self.linedict[line]}
@@ -24,15 +21,22 @@ class TestTramData(unittest.TestCase):
             self.assertIn(stop, self.stopdict, msg= stop + ' not in stopdict')
 
     # add your own tests here
-    def test_stops_range(self, max_dist):
+    """"Tests that all distances are reasonable, i.e. < 20 km"""
+    def test_stops_range(self, max_dist=20):
+        print("")
+        print("test dists")
         dist_list = []
-        for A in self.stopdict:
-            for B in self.stopdict:
-                dist_list.append(distance(A[lat], A[lon], B[lat], B[lon]) < max_dist)
-        if max(dist_list) < max_dist:
-            print(f"test ok: distances are smaller than {max_dist}")
-        else:
-            print(f"test failed: distances are larger than {max_dist}")
+        for A in self.stopdict.keys():
+            for B in self.stopdict.keys():
+                d = distance_between_stops(self.stopdict, A, B)  # do we need to verify this function? 
+                if d > max_dist:
+                    print(f"FAILED with dist {d} > {max_dist} between stops {A, B}", end = "\n\n")
+                    return 
+        print(f"test ok: distances are smaller than {max_dist}")
+        print("")
+
+
+
 
 
 

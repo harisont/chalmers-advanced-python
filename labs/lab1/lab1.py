@@ -99,14 +99,13 @@ def time_between_stops(lines: dict, times: dict, line: str, stop1: str, stop2: s
 Will give distance from stop A and B using formula at: 
 https://en.wikipedia.org/wiki/Geographical_distance#Spherical_Earth_projected_to_a_plane
 """
-def distance_between_stops(stops: dict, stop1, stop2) -> float: # tested against example online
+def distance_between_stops(stops: dict, stop1: str, stop2: str) -> float: # tested against example online
   R =  6371.009  # km 
   x2rad = math.pi/180
   dist = 0
-  
   try: 
-    (lat1, lon1) = zip(**stops[stop1])
-    (lat2, lon2) = zip(**stops[stop2])
+    (lat1, lon1) = map(float, (stops[stop1]['lat'], stops[stop1]['long']))
+    (lat2, lon2) = map(float, (stops[stop2]['lat'], stops[stop2]['long']))
   except KeyError: 
     print("Latitude and longitude of one stop not in database. ")
     return dist
@@ -149,9 +148,7 @@ def answer_query(tramdict, q: str):
   arg = ""
   if re.search(args, q) != None: 
     arg = re.search(args, q).group(0).strip()
-  else: 
-    return bad_args
-    
+
   match arg:
     case "via":
       stop = re.search("(?<=via).*", q)
