@@ -23,7 +23,7 @@ class TestTramData(unittest.TestCase):
     # add your own tests here
 
     """ Tests that all distances are reasonable, i.e. < 20 km. """
-    def test_dist_calc(self, max_dist=20):
+    def test_max_range(self, max_dist=20):
         print("")
         dist_list = []
         for A in self.stopdict.keys():
@@ -34,19 +34,9 @@ class TestTramData(unittest.TestCase):
                     return 
         print(f"OK: distances are smaller than {max_dist}")
         print("")
-    
-    """ Test that all lines in text file are in db. """
-    def test_lines_exist(self):
-        print("")
-        with open("../")
 
 
-
-
-
-
-
-
+    def test_lines_exists(self):
 
 
 if __name__ == '__main__':
