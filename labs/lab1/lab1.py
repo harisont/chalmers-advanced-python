@@ -144,45 +144,50 @@ def answer_query(tramdict, q: str):
   q = q.lower()
   args = "^\s*(via|between|time\swith|distance\sfrom)\s*"
   
+  failed = lambda: print("sorry, try again")
+  
   arg = ""
   if re.search(args, q) != None: 
     arg = re.search(args, q).group(0).strip()
-    print(arg)
   
   match arg:
     case "via":
       stop = re.search("(?<=via).*", q)
       if stop != None:
         stop = re.search("(?<=via).*", q).group(0).strip().title()
-        print(stop)
-        lines = lines_via_stop(tramdict["lines"], stop)
-        if lines:
-          print(lines)
+        ans = lines_via_stop(tramdict["lines"], stop)
+        if ans:
+          print(ans)
         else:
-          print(f"Unknown stop: {stop}.")
+          print(f"Unknown arguments")
+          # print(f"stop: {stop}. not found in database")
       
     case "between":
       if re.search("(?<=between).+\sand\s.+", q) != None:
         stop1 = re.search("(?<=between).+(?=\sand)", q).group(0).strip().title()
         stop2 = re.search("(?<=and\s).+", q).group(0).strip().title()
-        
-        
-        
-        if lines:
-          print(lines)
+        ans = lines_between_stops(tramdict["lines"], stop1, stop2)
+        if ans:
+          print(ans)
         else:
-          print(f"Unknown stop: {stop}.")
-      
+          print(f"Unknown arguments")
+      else: 
+        print(f"Unknown arguments")
 
-      print("between")
     case "time with":
-
-      print("time with")
+      args = re.search("(?<=time\swith)\s.+\sfrom\s.+\sto\s.+", q)
+      if args != None:
+        re.split("\s{2,}", args.group(0))
+        
+      else: 
+        print("Unknown arguments")
+    
+    
     case "distance from":
 
       print("distance from")
     case _: 
-      print("sorry, try again")
+      failed()
 
 
 if __name__ == "__main__":
