@@ -156,7 +156,7 @@ def answer_query(tramdict, q: str):
         return bad_args
         # print(f"stop: {stop}. not found in database")
     
-  elif  arg == "between":
+  elif arg == "between":
     if re.search("(?<=between).+\sand\s.+", q) != None:
       stop1 = re.search("(?<=between).+(?=\sand)", q).group(0).strip().title()
       stop2 = re.search("(?<=and\s).+", q).group(0).strip().title()
