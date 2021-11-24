@@ -135,7 +135,6 @@ def dialogue(jsonfile = "./tramnetwork.json") -> None:
     else: 
       print( answer_query(db, q) )
 
-
 def answer_query(tramdict, q: str):
   q = q.lower()
   args = "^\s*(via|between|time\swith|distance\sfrom)\s*"
@@ -145,7 +144,7 @@ def answer_query(tramdict, q: str):
   arg = ""
   if re.search(args, q) != None: 
     arg = re.search(args, q).group(0).strip()
-
+  
   if arg == "via":
     stop = re.search("(?<=via).*", q)
     if stop != None:
@@ -157,44 +156,44 @@ def answer_query(tramdict, q: str):
         return bad_args
         # print(f"stop: {stop}. not found in database")
     
-    elif  arg == "between":
-      if re.search("(?<=between).+\sand\s.+", q) != None:
-        stop1 = re.search("(?<=between).+(?=\sand)", q).group(0).strip().title()
-        stop2 = re.search("(?<=and\s).+", q).group(0).strip().title()
-        ans = lines_between_stops(tramdict["lines"], stop1, stop2)
-        if ans:
-          print(", ".join(ans))
-        else:
-          return bad_args
-      else: 
-        return bad_args
-
-    elif arg == "time with":
-      args = re.search("(?<=time\swith)\s.+\sfrom\s.+\sto\s.+", q)
-      if args != None:
-        line = re.search("(?<=time\swith).+(?=\sfrom)", q).group(0).strip().title()
-        stop1 = re.search("(?<=from\s).+(?=\sto)", q).group(0).strip().title()
-        stop2 = re.search("(?<=to\s).+$", q).group(0).strip().title()
-        
-        if line not in tramdict["lines"].keys():
-          return bad_args
-        elif (stop1 or stop2) not in tramdict["stops"]:
-          return bad_args
-        else: 
-          return time_between_stops(tramdict["lines"], tramdict["times"], line, stop1, stop2)
-      else: 
-        return bad_args
-    
-    elif arg == "distance from":
-      args = re.search("(?<=distance from)\s.+\sto\s.+", q)
-      if args != None:
-        stop1 = re.search("(?<=from\s).+(?=\sto)", q).group(0).strip().title()
-        stop2 = re.search("(?<=to\s).+$", q).group(0).strip().title()
+  elif  arg == "between":
+    if re.search("(?<=between).+\sand\s.+", q) != None:
+      stop1 = re.search("(?<=between).+(?=\sand)", q).group(0).strip().title()
+      stop2 = re.search("(?<=and\s).+", q).group(0).strip().title()
+      ans = lines_between_stops(tramdict["lines"], stop1, stop2)
+      if ans:
+        return ", ".join(ans)
       else:
         return bad_args
-        
     else: 
-      return "Sorry, try again."
+      return bad_args
+
+  elif arg == "time with":
+    args = re.search("(?<=time\swith)\s.+\sfrom\s.+\sto\s.+", q)
+    if args != None:
+      line = re.search("(?<=time\swith).+(?=\sfrom)", q).group(0).strip().title()
+      stop1 = re.search("(?<=from\s).+(?=\sto)", q).group(0).strip().title()
+      stop2 = re.search("(?<=to\s).+$", q).group(0).strip().title()
+      
+      if line not in tramdict["lines"].keys():
+        return bad_args
+      elif (stop1 or stop2) not in tramdict["stops"]:
+        return bad_args
+      else: 
+        return time_between_stops(tramdict["lines"], tramdict["times"], line, stop1, stop2)
+    else: 
+      return bad_args
+  
+  elif arg == "distance from":
+    args = re.search("(?<=distance from)\s.+\sto\s.+", q)
+    if args != None:
+      stop1 = re.search("(?<=from\s).+(?=\sto)", q).group(0).strip().title()
+      stop2 = re.search("(?<=to\s).+$", q).group(0).strip().title()
+    else:
+      return bad_args
+
+  else: 
+    return "Sorry, try again."
 
 
 if __name__ == "__main__":
