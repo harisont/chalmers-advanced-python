@@ -146,19 +146,18 @@ def answer_query(tramdict, q: str):
   if re.search(args, q) != None: 
     arg = re.search(args, q).group(0).strip()
 
-  match arg:
-    case "via":
-      stop = re.search("(?<=via).*", q)
-      if stop != None:
-        stop = re.search("(?<=via).*", q).group(0).strip().title()
-        ans = lines_via_stop(tramdict["lines"], stop)
-        if ans:
-          return(", ".join(ans))
-        else:
-          return bad_args
-          # print(f"stop: {stop}. not found in database")
-      
-    case "between":
+  if arg == "via":
+    stop = re.search("(?<=via).*", q)
+    if stop != None:
+      stop = re.search("(?<=via).*", q).group(0).strip().title()
+      ans = lines_via_stop(tramdict["lines"], stop)
+      if ans:
+        return(", ".join(ans))
+      else:
+        return bad_args
+        # print(f"stop: {stop}. not found in database")
+    
+    elif  arg == "between":
       if re.search("(?<=between).+\sand\s.+", q) != None:
         stop1 = re.search("(?<=between).+(?=\sand)", q).group(0).strip().title()
         stop2 = re.search("(?<=and\s).+", q).group(0).strip().title()
@@ -170,7 +169,7 @@ def answer_query(tramdict, q: str):
       else: 
         return bad_args
 
-    case "time with":
+    elif arg == "time with":
       args = re.search("(?<=time\swith)\s.+\sfrom\s.+\sto\s.+", q)
       if args != None:
         line = re.search("(?<=time\swith).+(?=\sfrom)", q).group(0).strip().title()
@@ -186,16 +185,15 @@ def answer_query(tramdict, q: str):
       else: 
         return bad_args
     
-    case "distance from":
+    elif arg == "distance from":
       args = re.search("(?<=distance from)\s.+\sto\s.+", q)
       if args != None:
         stop1 = re.search("(?<=from\s).+(?=\sto)", q).group(0).strip().title()
         stop2 = re.search("(?<=to\s).+$", q).group(0).strip().title()
-
       else:
         return bad_args
-      print("distance from")
-    case _: 
+        
+    else: 
       return "Sorry, try again."
 
 
