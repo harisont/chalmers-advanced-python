@@ -21,10 +21,10 @@ class TestTramData(unittest.TestCase):
             self.assertIn(stop, self.stopdict, msg= stop + ' not in stopdict')
 
     # add your own tests here
-    """"Tests that all distances are reasonable, i.e. < 20 km"""
-    def test_stops_range(self, max_dist=20):
+
+    """ Tests that all distances are reasonable, i.e. < 20 km. """
+    def test_dist_calc(self, max_dist=20):
         print("")
-        print("test dists")
         dist_list = []
         for A in self.stopdict.keys():
             for B in self.stopdict.keys():
@@ -32,8 +32,15 @@ class TestTramData(unittest.TestCase):
                 if d > max_dist:
                     print(f"FAILED with dist {d} > {max_dist} between stops {A, B}", end = "\n\n")
                     return 
-        print(f"test ok: distances are smaller than {max_dist}")
+        print(f"OK: distances are smaller than {max_dist}")
         print("")
+    
+    """ Test that all lines in text file are in db. """
+    def test_lines_exist(self):
+        print("")
+        with open("../")
+
+
 
 
 
