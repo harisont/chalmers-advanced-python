@@ -151,7 +151,7 @@ def answer_query(tramdict, q: str):
       stop = re.search("(?<=via).*", q).group(0).strip().title()
       ans = lines_via_stop(tramdict["lines"], stop)
       if ans:
-        return(", ".join(ans))
+        return ", ".join(ans) 
       else:
         return bad_args
         # print(f"stop: {stop}. not found in database")
