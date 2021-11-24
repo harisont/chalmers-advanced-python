@@ -79,20 +79,17 @@ def lines_between_stops(lines, stop1, stop2) -> list:
 This is obtained as the sum of all distances between adjacent stops. 
 If the stops are not along the same line, an error message is printed. """
 def time_between_stops(lines: dict, times: dict, line: str, stop1: str, stop2: str) -> str:
+  if line not in lines.keys():
+    return f"line {line} not in database"
+  
   stops: list = lines[line]
+  
   if stop1 not in stops:
     return f"{line} does not stop at {stop1}"
   if stop2 not in stops:
     return f"{line} does not stop at {stop2}"
   
-  x = 0
-  (r1s, r1e) = (stops.index(stop1), stops.index(stop2)+1) # + 1 to make inclusive
-  (r2s, r2e) = (r1s+1, r1e+1)
-  for (s1, s2) in zip(stops[r1s:r1e], stops[r2s:r2e]):
-    x+= times[s1][s2]
-    # Make an try/catch if this fails due to database errors? 
-  
-  return str(x)
+  return str(times[stop1][stop2])
 
 
 """
