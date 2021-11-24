@@ -144,7 +144,6 @@ def answer_query(tramdict, q: str):
   q = q.lower()
   args = "^\s*(via|between|time\swith|distance\sfrom)\s*"
   
-  failed = lambda: print("sorry, try again")
   bad_args = "Unknown arguments."
 
   arg = ""
@@ -193,10 +192,16 @@ def answer_query(tramdict, q: str):
     
     
     case "distance from":
-
+      args = re.search("(?<=distance from)\s.+\sto\s.+", q)
+      if args != None:
+        stop1 = re.search("(?<=from\s).+(?=\sto)", q).group(0).strip().title()
+        stop2 = re.search("(?<=to\s).+$", q).group(0).strip().title()
+        
+      else:
+        return bad_args
       print("distance from")
     case _: 
-      failed()
+      return "Sorry, tri again."
 
 
 if __name__ == "__main__":
