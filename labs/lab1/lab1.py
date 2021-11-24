@@ -9,7 +9,7 @@ def build_tram_stops(jsonobject):
 def build_tram_lines(file):
   txt = file.read()
   
-  keys = [re.sub(":\n$", "", l) for l in re.findall(".+:\n", txt)]
+  keys = [l for l in re.findall(".+(?=:\n)", txt)]
   stop_lists = [re.findall(".+\S+(?=\s{2,}\d+:\d+)", s) for s in re.split("\n\n", txt)]
   time_lists = [list(map(int, re.findall("(?<=\d\d:)\d+", l))) for l in re.split("\n\n", txt)]  
   
