@@ -149,7 +149,9 @@ def answer_query(tramdict, q: str):
   arg = ""
   if re.search(args, q) != None: 
     arg = re.search(args, q).group(0).strip()
-  
+  else: 
+    return bad_args
+    
   match arg:
     case "via":
       stop = re.search("(?<=via).*", q)
