@@ -186,7 +186,6 @@ def answer_query(tramdict, q: str):
       else: 
         return bad_args
     
-    
     case "distance from":
       args = re.search("(?<=distance from)\s.+\sto\s.+", q)
       if args != None:
