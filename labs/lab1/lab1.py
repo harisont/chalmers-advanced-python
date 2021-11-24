@@ -78,21 +78,21 @@ def lines_between_stops(lines, stop1, stop2) -> list:
 """ Function returns the time from `stop1` to `stop2` along the given `line`. 
 This is obtained as the sum of all distances between adjacent stops. 
 If the stops are not along the same line, an error message is printed. """
-def time_between_stops(lines: dict, times: dict, line: str, stop1: str, stop2: str) -> int:
+def time_between_stops(lines: dict, times: dict, line: str, stop1: str, stop2: str) -> str:
   stops: list = lines[line]
   if stop1 not in stops:
-    print(f"{stop1} not a stop along line: {line}")
+    return f"{line} does not stop at {stop1}"
   if stop2 not in stops:
-    print(f"{stop2} not a stop along line: {line}")
+    return f"{line} does not stop at {stop2}"
   
   x = 0
-  r1 = range(stops.index(stop1), stops.index(stop2))
-  r2 = r1 + 1
-  for (s1, s2) in zip(stops[r1], stops[r2]):
+  (r1s, r1e) = (stops.index(stop1), stops.index(stop2)+1) # + 1 to make inclusive
+  (r2s, r2e) = (r1s+1, r1e+1)
+  for (s1, s2) in zip(stops[r1s:r1e], stops[r2s:r2e]):
     x+= times[s1][s2]
     # Make an try/catch if this fails due to database errors? 
   
-  return x
+  return str(x)
 
 
 """
@@ -145,7 +145,8 @@ def answer_query(tramdict, q: str):
   args = "^\s*(via|between|time\swith|distance\sfrom)\s*"
   
   failed = lambda: print("sorry, try again")
-  
+  bad_args = "Unknown arguments."
+
   arg = ""
   if re.search(args, q) != None: 
     arg = re.search(args, q).group(0).strip()
@@ -157,9 +158,9 @@ def answer_query(tramdict, q: str):
         stop = re.search("(?<=via).*", q).group(0).strip().title()
         ans = lines_via_stop(tramdict["lines"], stop)
         if ans:
-          print(ans)
+          return(", ".join(ans))
         else:
-          print(f"Unknown arguments")
+          return bad_args
           # print(f"stop: {stop}. not found in database")
       
     case "between":
@@ -168,19 +169,27 @@ def answer_query(tramdict, q: str):
         stop2 = re.search("(?<=and\s).+", q).group(0).strip().title()
         ans = lines_between_stops(tramdict["lines"], stop1, stop2)
         if ans:
-          print(ans)
+          print(", ".join(ans))
         else:
-          print(f"Unknown arguments")
+          return bad_args
       else: 
-        print(f"Unknown arguments")
+        return bad_args
 
     case "time with":
       args = re.search("(?<=time\swith)\s.+\sfrom\s.+\sto\s.+", q)
       if args != None:
-        re.split("\s{2,}", args.group(0))
+        line = re.search("(?<=time\swith).+(?=\sfrom)", q).group(0).strip().title()
+        stop1 = re.search("(?<=from\s).+(?=\sto)", q).group(0).strip().title()
+        stop2 = re.search("(?<=to\s).+$", q).group(0).strip().title()
         
+        if line not in tramdict["lines"].keys():
+          return bad_args
+        elif (stop1 or stop2) not in tramdict["stops"]:
+          return bad_args
+        else: 
+          return time_between_stops(tramdict["lines"], tramdict["times"], line, stop1, stop2)
       else: 
-        print("Unknown arguments")
+        return bad_args
     
     
     case "distance from":
