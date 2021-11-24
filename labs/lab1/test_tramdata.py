@@ -76,8 +76,9 @@ class TestTramData(unittest.TestCase):
         # An example of a hardcoded test for the query function. 
         # I would maybe check some strings that should give a failure too
         # Note that the parser is somewhat helpful when it parses the input
-        
+
         self.assertEqual(answer_query(tramdict, "via Brunnsparken"), "1, 2, 3, 4, 5, 6, 7, 9, 10, 11")
+        self.assertEqual(answer_query(tramdict, "Brunnsparken"), "Sorry, try again.")
 
 
 
