@@ -73,9 +73,14 @@ class TestTramData(unittest.TestCase):
     
     def test_answer_query(self):
         tramdict = {"stops": self.stopdict, "lines": self.linedict, "times": self.timedict}
-        # An example of a hardcoded test for the query function. 
-        # I would maybe check some strings that should give a failure too
-        # Note that the parser is somewhat helpful when it parses the input
+        """
+        An example of a hardcoded test for the query function. 
+        I would maybe check some strings that should give a failure too
+        Note that the parser is somewhat helpful when it parses the input
+        Ideally you would make a str generator to test various types of inputs, but this and the remaining tests of the 
+        query funcftion are left to my lab mate
+        """
+
 
         self.assertEqual(answer_query(tramdict, "via Brunnsparken"), "1, 2, 3, 4, 5, 6, 7, 9, 10, 11")
         self.assertEqual(answer_query(tramdict, "Brunnsparken"), "Sorry, try again.")
