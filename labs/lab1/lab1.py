@@ -196,12 +196,12 @@ def answer_query(tramdict, q: str):
       if args != None:
         stop1 = re.search("(?<=from\s).+(?=\sto)", q).group(0).strip().title()
         stop2 = re.search("(?<=to\s).+$", q).group(0).strip().title()
-        
+
       else:
         return bad_args
       print("distance from")
     case _: 
-      return "Sorry, tri again."
+      return "Sorry, try again."
 
 
 if __name__ == "__main__":
